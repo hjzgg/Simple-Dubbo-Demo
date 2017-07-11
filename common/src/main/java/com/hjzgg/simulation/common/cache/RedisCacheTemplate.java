@@ -263,7 +263,7 @@ public class RedisCacheTemplate {
      * @return 值
      */
     public Object get(String key) {
-        Cache.ValueWrapper wrapper = redisCache.get(key);
+        Cache.ValueWrapper wrapper = redisCache.get(this.addPrefix(key));
         return wrapper == null ? null : wrapper.get();
     }
 
@@ -274,7 +274,7 @@ public class RedisCacheTemplate {
      */
 
     public <T> T get(String key, Class<T> cls) {
-        return this.get(key) == null ? null : (T) this.get(key);
+        return this.get(key) == null ? null : (T) this.get(this.addPrefix(key));
     }
 
     /**
@@ -286,7 +286,7 @@ public class RedisCacheTemplate {
      */
 
     public <T> T get(String key, Callable<T> callable) {
-        return redisCache.get(key, callable);
+        return redisCache.get(this.addPrefix(key), callable);
     }
 
     /**

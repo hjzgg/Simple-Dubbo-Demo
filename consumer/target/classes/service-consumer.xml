@@ -1,4 +1,4 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <services-consumer>
-    <service ref="testService" interface="com.hjzgg.simulation.api.ITestService" url="http://localhost:8088/provider-service/index/provider"/>
+    <service ref="testService" interface="com.hjzgg.simulation.api.ITestService" url="http://localhost:8088/provider-server/index/provider"/>
 </services-consumer>

@@ -5,6 +5,7 @@ import com.hjzgg.simulation.common.node.InterfaceMessage;
 import com.hjzgg.simulation.common.node.RegisterMessage;
 import com.hjzgg.simulation.common.response.SimpleResponse;
 import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -27,7 +28,7 @@ public class IndexController {
             Map<String, Object> map = new HashMap<>();
             for (InterfaceMessage interfaceMessage : registerMessage.getInterfaceMessageList()) {
                 interfaceMessage.setProviderUrl(registerMessage.getProviderUrl());
-                map.put(ToStringBuilder.reflectionToString(interfaceMessage), true);
+                map.put(ToStringBuilder.reflectionToString(interfaceMessage, ToStringStyle.SHORT_PREFIX_STYLE), true);
             }
             redisCacheTemplate.batchPut(map);
             return SimpleResponse.success(map.size());
@@ -41,7 +42,7 @@ public class IndexController {
     @RequestMapping(value = "contains", method = RequestMethod.POST)
     public SimpleResponse contains(@RequestBody InterfaceMessage interfaceMessage) {
         try {
-            if(redisCacheTemplate.get(ToStringBuilder.reflectionToString(interfaceMessage)) != null) {
+            if(redisCacheTemplate.exist(ToStringBuilder.reflectionToString(interfaceMessage, ToStringStyle.SHORT_PREFIX_STYLE))) {
                 return SimpleResponse.success(true);
             } else {
                 return SimpleResponse.error(null);

@@ -9,7 +9,7 @@ import org.springframework.context.annotation.ComponentScan;
 // SpringBoot标准注解, 一般写在App入口处
 @SpringBootApplication
 @EnableAutoConfiguration
-@ComponentScan
+@ComponentScan("com.hjzgg.simulation")
 // 开启Servlet扫描
 @ServletComponentScan
 

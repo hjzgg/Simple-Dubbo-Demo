@@ -18,10 +18,11 @@
     <name>service</name>
     <url>http://maven.apache.org</url>
 
+    <!--第一种 依赖 springboot方式-->
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>${spring-boot.version}</version>
+        <version>1.5.2.RELEASE</version>
     </parent>
 
 
@@ -62,6 +63,7 @@
                 <version>${swagger2-version}</version>
             </dependency>
 
+            <!--第二种依赖springboot方式-->
             <!--<dependency>-->
                 <!--<groupId>org.springframework.boot</groupId>-->
                 <!--<artifactId>spring-boot-dependencies</artifactId>-->

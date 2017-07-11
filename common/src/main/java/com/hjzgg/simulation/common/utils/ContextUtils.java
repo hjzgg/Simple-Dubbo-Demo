@@ -3,10 +3,12 @@ package com.hjzgg.simulation.common.utils;
 import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
+import org.springframework.stereotype.Component;
 
 /**
  * spring应用上下文工具类
  */
+@Component
 public class ContextUtils implements ApplicationContextAware {
     private static ApplicationContext applicationContext; //应用上下文对象
 

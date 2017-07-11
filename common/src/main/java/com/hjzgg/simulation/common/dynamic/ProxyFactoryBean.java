@@ -6,7 +6,7 @@ import org.springframework.beans.factory.InitializingBean;
 /**
  * Created by hujunzheng on 2017/7/7.
  */
-public class ProxyFactoryBean implements FactoryBean, InitializingBean {
+public class ProxyFactoryBean implements FactoryBean {
 
     private String url;
     private Class<?> interfaceCls;
@@ -14,14 +14,27 @@ public class ProxyFactoryBean implements FactoryBean, InitializingBean {
 
     private Object proxy;
 
+    private Object newInstance() {
+        if(this.isSingleton() && proxy != null) {
+            return proxy;
+        }
+        synchronized (this) {
+            Object target = JdkDynamicProxy.createJDKProxy(this);
+            if(proxy == null) {
+                proxy = target;
+            }
+            return target;
+        }
+    }
+
     @Override
     public Object getObject() throws Exception {
-        return this.proxy;
+        return this.newInstance();
     }
 
     @Override
     public Class<?> getObjectType() {
-        return proxy.getClass();
+        return interfaceCls;
     }
 
     @Override
@@ -51,10 +64,5 @@ public class ProxyFactoryBean implements FactoryBean, InitializingBean {
 
     public void setUrl(String url) {
         this.url = url;
-    }
-
-    @Override
-    public void afterPropertiesSet() throws Exception {
-        this.proxy = JdkDynamicProxy.createJDKProxy(this);
     }
 }

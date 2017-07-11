@@ -47,8 +47,8 @@ public class SimpleResponse {
         this.data = data;
     }
 
-    public ReturnCode getCode() {
-        return code;
+    public Integer getCode() {
+        return code.getValue();
     }
 
     public void setCode(ReturnCode code) {

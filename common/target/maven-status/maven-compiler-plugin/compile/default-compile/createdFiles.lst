@@ -5,6 +5,7 @@ com/hjzgg/simulation/common/response/ReturnCode.class
 com/hjzgg/simulation/common/register/SpringBeanRegister.class
 com/hjzgg/simulation/common/parsexml/Service.class
 com/hjzgg/simulation/common/dynamic/JdkDynamicProxy.class
+com/hjzgg/simulation/common/utils/SerializeUtil.class
 com/hjzgg/simulation/common/dynamic/ProxyFactoryBean.class
 com/hjzgg/simulation/common/cache/CacheConfig$1.class
 com/hjzgg/simulation/common/response/SimpleResponse.class

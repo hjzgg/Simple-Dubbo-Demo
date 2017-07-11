@@ -12,3 +12,4 @@
 /Users/apple/工作空间/mystudy/service/common/src/main/java/com/hjzgg/simulation/common/parsexml/BeanNode.java
 /Users/apple/工作空间/mystudy/service/common/src/main/java/com/hjzgg/simulation/common/register/SpringBeanRegister.java
 /Users/apple/工作空间/mystudy/service/common/src/main/java/com/hjzgg/simulation/common/cache/RedisCacheTemplate.java
+/Users/apple/工作空间/mystudy/service/common/src/main/java/com/hjzgg/simulation/common/utils/SerializeUtil.java

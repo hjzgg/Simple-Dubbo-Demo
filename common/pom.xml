@@ -19,6 +19,11 @@
 
 
     <dependencies>
+        <dependency>
+            <groupId>commons-codec</groupId>
+            <artifactId>commons-codec</artifactId>
+        </dependency>
+
         <!-- dom4j -->
         <dependency>
             <groupId>dom4j</groupId>

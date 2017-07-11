@@ -2,6 +2,7 @@ package com.hjzgg.simulation.consumer.config;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
+import com.hjzgg.simulation.common.dynamic.JdkDynamicProxy;
 import com.hjzgg.simulation.common.node.InterfaceMessage;
 import com.hjzgg.simulation.common.parsexml.BeanNode;
 import com.hjzgg.simulation.common.parsexml.ParseServiceXML;
@@ -41,13 +42,18 @@ public class Registrar implements ImportBeanDefinitionRegistrar, EnvironmentAwar
             interfaceMessage.setInterfacType(beanNode.getInterfaceCls().getTypeName());
             interfaceMessage.setBeanName(beanNode.getBeanName());
 
-            String result = RestTemplateUtils.post(this.serviceContainsPath, (JSONObject) JSON.toJSON(interfaceMessage), MediaType.APPLICATION_JSON_UTF8);
-            JSONObject retJson = JSON.parseObject(result);
-            if (retJson.getInteger("code") == ReturnCode.FAILURE.getValue()) {
-                it.remove();
+            try {
+                String result = RestTemplateUtils.post(this.serviceContainsPath, (JSONObject) JSON.toJSON(interfaceMessage), MediaType.APPLICATION_JSON_UTF8);
+                JSONObject retJson = JSON.parseObject(result);
+                if (retJson.getInteger("code") == ReturnCode.FAILURE.getValue()) {
+                    it.remove();
 
-                logger.error(interfaceMessage.getBeanName() + "对应类型" + interfaceMessage.getInterfacType() + "的服务在" +
-                interfaceMessage.getProviderUrl() + "上没有注册");
+                    logger.error(interfaceMessage.getBeanName() + "对应类型" + interfaceMessage.getInterfacType() + "的服务在" +
+                    interfaceMessage.getProviderUrl() + "上没有注册");
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+                logger.error("服务" + interfaceMessage.getBeanName() + "对应类型" + interfaceMessage.getInterfacType() + "查找失败..." + e.getMessage());
             }
         }
         SpringBeanRegister.registerBean(importingClassMetadata, registry, beanNodes);
@@ -56,8 +62,12 @@ public class Registrar implements ImportBeanDefinitionRegistrar, EnvironmentAwar
     @Override
     public void setEnvironment(Environment environment) {
         this.servicesXmlPath = environment.getProperty("service.xml.path");
-        this.serviceContainsPath = environment.getProperty("service.contains.path");
+        this.serviceContainsPath = environment.getProperty("service.contains.url");
+        String serviceInvokePath = environment.getProperty("service.invoke.url");
 
-        assert(StringUtils.isNotEmpty(serviceContainsPath) && StringUtils.isNotEmpty(this.servicesXmlPath));
+        assert(StringUtils.isNotEmpty(serviceContainsPath) && StringUtils.isNotEmpty(this.servicesXmlPath)
+            && StringUtils.isNotEmpty(serviceInvokePath));
+
+        JdkDynamicProxy.setServerProviderInvokeUrl(serviceInvokePath);
     }
 }

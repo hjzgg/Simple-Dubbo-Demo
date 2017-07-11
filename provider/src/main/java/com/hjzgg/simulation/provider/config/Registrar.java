@@ -47,12 +47,17 @@ public class Registrar implements ImportBeanDefinitionRegistrar, EnvironmentAwar
             RegisterMessage registerMessage = new RegisterMessage();
             registerMessage.setProviderUrl(this.serviceProviderPath);
             registerMessage.setInterfaceMessageList(list);
-            String result = RestTemplateUtils.post(this.serviceRegisterPath, (JSONObject) JSON.toJSON(registerMessage), MediaType.APPLICATION_JSON_UTF8);
-            JSONObject retJson = JSONObject.parseObject(result);
-            if(retJson.getInteger("code") == ReturnCode.SUCCESS.getValue()) {
-                logger.info("服务注册成功...");
-            } else {
-                logger.error("服务注册失败..." + retJson.getString("msg"));
+            try {
+                String result = RestTemplateUtils.post(this.serviceRegisterPath, (JSONObject) JSON.toJSON(registerMessage), MediaType.APPLICATION_JSON_UTF8);
+                JSONObject retJson = JSONObject.parseObject(result);
+                if(retJson.getInteger("code") == ReturnCode.SUCCESS.getValue()) {
+                    logger.debug("服务注册成功...");
+                } else {
+                    logger.error("服务注册失败..." + retJson.getString("msg"));
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+                logger.error("服务注册失败..." + e.getMessage());
             }
         }
     }
