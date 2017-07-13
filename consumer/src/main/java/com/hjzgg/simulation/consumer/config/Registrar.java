@@ -22,8 +22,6 @@ import org.springframework.http.MediaType;
 import java.util.Iterator;
 import java.util.List;
 
-import static com.alibaba.fastjson.JSON.*;
-
 public class Registrar implements ImportBeanDefinitionRegistrar, EnvironmentAware{
 
     private Logger logger = LoggerFactory.getLogger(Registrar.class);
