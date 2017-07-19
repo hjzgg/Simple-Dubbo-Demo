@@ -25,6 +25,9 @@ public class RedisCacheTemplate {
     private static final String DEFAULT_KEY_SPACE = "default_cache";
     private RedisCache redisCache;
     private RedisTemplate redisTemplate;
+
+    private RedisTemplate<String, Object> stringObjectRedisTemplate;
+
     @Autowired
     private RedisCacheManager redisCacheManager;
 
@@ -32,6 +35,7 @@ public class RedisCacheTemplate {
     public void init() {
         redisCache = (RedisCache) redisCacheManager.getCache(DEFAULT_KEY_SPACE);
         redisTemplate = (RedisTemplate) redisCache.getNativeCache();
+        stringObjectRedisTemplate = (RedisTemplate<String, Object>)redisCache.getNativeCache();
     }
 
     /**
@@ -42,7 +46,7 @@ public class RedisCacheTemplate {
      */
 
     public void put(final String key, final Object value) {
-        redisCache.put(key, value);
+        redisCache.put(addPrefix(key), value);
     }
 
     /**
@@ -425,17 +429,45 @@ public class RedisCacheTemplate {
         redisCache.clear();
     }
 
-
+    /**
+     * @MethodName:
+     * @Description: TODO
+     * @author: hujunzheng
+     * @Date: 2017/7/19 下午1:04
+     *
+     * @Return:
+     * @Parameter:
+     */
     public void hPut(String key, String hashKey, Object value) {
         redisTemplate.opsForHash().put(addPrefix(key), hashKey, value);
     }
 
-
+    /**
+     * @MethodName: hGet
+     * @Description: 根据 hash值 获取value
+     * @author: hujunzheng
+     * @Date: 2017/7/19 下午1:04
+     *
+     * @Return:
+     * @Parameter:
+     */
     public Object hGet(String key, String hashKey) {
         return redisTemplate.opsForHash().get(addPrefix(key), hashKey);
     }
 
+    public List<Object> hMultiGet(String key, List<String> hashKeys) {
+        return redisTemplate.opsForHash().multiGet(key, hashKeys);
+    }
 
+    /**
+     * @MethodName: hExist
+     * @Description: 判断 hash值是否存在
+     * @author: hujunzheng
+     * @Date: 2017/7/19 下午1:04
+     *
+     * @Return:
+     * @Parameter:
+     */
     public boolean hExist(String key, String hashKey) {
         return redisTemplate.opsForHash().hasKey(addPrefix(key), hashKey);
     }
@@ -451,6 +483,19 @@ public class RedisCacheTemplate {
     }
 
     /**
+     * @MethodName: getTTL
+     * @Description: 获取key的过期时间
+     * @author: hujunzheng
+     * @Date: 2017/7/19 下午1:05
+     *
+     * @Return:
+     * @Parameter:
+     */
+    public Long getTTL(String key) {
+        return redisTemplate.getExpire(key, TimeUnit.SECONDS);
+    }
+
+    /**
      * 给键添加前缀
      *
      * @param key 键
@@ -458,5 +503,9 @@ public class RedisCacheTemplate {
      */
     private String addPrefix(String key) {
         return redisCache.getName() + ":" + key;
+    }
+
+    public Set<Object> hKeys(String key) {
+        return stringObjectRedisTemplate.opsForHash().keys(addPrefix(key));
     }
 }
